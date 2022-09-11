@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=cocktail
+
+1.init 2022-09-07T21:41:29Z Etudiant O'clock <student@teleporter> # creation database
+2.functions 2022-09-07T21:42:35Z Etudiant O'clock <student@teleporter> # creation fonctions
