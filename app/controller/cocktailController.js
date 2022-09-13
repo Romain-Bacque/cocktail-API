@@ -47,7 +47,7 @@ const cocktailController = {
      * @returns {Array.<Cocktail>}
      */
     async addCocktail(req, res) {
-        const newCocktail = await new Cocktail(req.body);
+        const newCocktail = new Cocktail(req.body);
         const result = await newCocktail.insertOne();
         
         if(result) {
@@ -66,7 +66,7 @@ const cocktailController = {
 
         assert.ok(!isNaN(id), 'id must be a number!');
 
-        const newCocktail = await new Cocktail(req.body);
+        const newCocktail = new Cocktail(req.body);
         const result = await newCocktail.updateOne(id);
         
         if(result) {

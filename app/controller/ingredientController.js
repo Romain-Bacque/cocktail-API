@@ -47,7 +47,7 @@ const ingredientController = {
      * @returns {Array.<Ingredient>}
      */
     async addIngredient(req, res) {
-        const newIngredient = await new Ingredient(req.body);
+        const newIngredient = new Ingredient(req.body);
         const result = await newIngredient.insertOne();
         
         if(result) {

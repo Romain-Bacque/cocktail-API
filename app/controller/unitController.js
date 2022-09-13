@@ -46,7 +46,7 @@ const unitController = {
      * @returns {Array.<Unit>}
      */
     async addUnit(req, res) {
-        const newUnit = await new Unit(req.body);
+        const newUnit = new Unit(req.body);
         const result = await newUnit.insertOne();
         
         if(result) {
