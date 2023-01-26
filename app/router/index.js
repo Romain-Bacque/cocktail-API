@@ -1,4 +1,3 @@
-
 const express = require('express');
 const errorHandler = require('../service/errorHandler');
 const cocktailRouter = require('./cocktailRouter');

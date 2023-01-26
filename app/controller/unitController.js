@@ -67,6 +67,7 @@ const unitController = {
         const result = await Unit.deleteOne(id);
 
         if(result) {
+            debug(result);
             res.sendStatus(200);
         } else throw new ExpressError('not found', 404);
     },

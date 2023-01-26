@@ -86,6 +86,7 @@ const cocktailController = {
 
         const result = await Cocktail.deleteOne(id);
 
+        debug(result);
         if(result) {
             res.sendStatus(200);
         } else throw new ExpressError('not found', 404);

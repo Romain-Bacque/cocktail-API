@@ -67,6 +67,7 @@ const ingredientController = {
 
         const result = await Ingredient.deleteOne(id);
 
+        debug(result);
         if(result) {
             res.sendStatus(200);
         } else throw new ExpressError('not found', 404);

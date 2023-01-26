@@ -1,0 +1,4 @@
+COCKTAIL (id, name)
+INGREDIENT (id, #unit_id, name)
+COCKTAIL_HAS_INGREDIENT (#ingredient_id, #cocktail_id)
+UNIT (id, title)
