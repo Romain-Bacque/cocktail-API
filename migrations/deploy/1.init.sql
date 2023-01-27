@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS "cocktail" (
 CREATE TABLE IF NOT EXISTS "ingredient" (
     "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" TEXT NOT NULL UNIQUE,
-    "unit_id" INT REFERENCES "unit"("id") ON DELETE CASCADE,
+    "unit_id" INT,
     "created_at" TIMESTAMPTZ DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );
