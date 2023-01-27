@@ -87,9 +87,7 @@ class Cocktail extends CoreModel {
 
         const result = await client.query(query);
 
-        if(result.rowCount > 0) {
-            return true;
-        } else return null; 
+        return result.rowCount > 0;
     }
 }
 
