@@ -1,20 +1,23 @@
 const debug = require('debug')('controller');
 const { Ingredient } = require('../model');
 const ExpressError = require('../service/ExpressError');
-const assert = require('assert')
+const assert = require('assert');
 
 /**
- * ingredient est composé de 2 propriétés: name, details
+ * ingredient is composed of 2 properties: name, details
  * @typedef {Object} Ingredient
  * @property {String} name nom de l'ingredient
  * @property {String} unit titre de l'unité
  */
 const ingredientController = {
     /**
-     * Méthode pour retourner une liste d'ingredients
+     * Method to return an ingredient list
+     * @param {*} _ unused parameter
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Ingredient>}
      */
-    async getAllIngredients(_, res) {
+    async getAllIngredients(_, res, next) {
         const results = await Ingredient.getAll();
         
         if(results) {
@@ -22,13 +25,16 @@ const ingredientController = {
         
             debug(ingredients);
             res.status(200).json(ingredients);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour retourner un ingredient
+     * Method to return an ingredient
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Ingredient}
      */
-    async getIngredientById(req, res) {
+    async getIngredientById(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -40,13 +46,16 @@ const ingredientController = {
 
             debug(ingredient);
             res.status(200).json(ingredient);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour ajouter un ingredient, puis retourne une liste d'ingredients à jour
+     * Method to add an ingredient, then return an updated ingredient list
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Ingredient>}
      */
-    async addIngredient(req, res) {
+    async addIngredient(req, res, next) {
         const newIngredient = new Ingredient(req.body);
         const result = await newIngredient.insertOne();
         
@@ -55,12 +64,15 @@ const ingredientController = {
 
             debug(result);
             res.status(200).json(ingredients);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour supprimer un ingredient
+     * Methode to delete an ingredient
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      */
-    async deleteIngredient(req, res) {
+    async deleteIngredient(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -70,7 +82,7 @@ const ingredientController = {
         debug(result);
         if(result) {
             res.sendStatus(200);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
 }
 

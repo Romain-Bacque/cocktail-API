@@ -4,16 +4,19 @@ const ExpressError = require('../service/ExpressError');
 const assert = require('assert')
 
 /**
- * unit est composé de 2 propriétés: name, details
+ * Unit is composed of 2 properties: name, details
  * @typedef {Object} Unit
- * @property {String} title titre de l'unité
+ * @property {String} title unit title
  */
 const unitController = {
     /**
-     * Méthode pour retourner une liste d'unités
+     * Method to return a list of units
+     * @param {*} _ unused parameter
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Unit>}
      */
-    async getAllUnits(_, res) {
+    async getAllUnits(_, res, next) {
         const results = await Unit.getAll();
         
         if(results) {
@@ -21,13 +24,16 @@ const unitController = {
         
             debug(units);
             res.status(200).json(units);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour retourner une unité
+     * Method to return a unit
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Unit}
      */
-    async getUnitById(req, res) {
+    async getUnitById(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -39,13 +45,16 @@ const unitController = {
 
             debug(unit);
             res.status(200).json(unit);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour ajouter une unité, puis retourne une liste d'unités à jour
+     * Method to add a unit, then return a list of updated units
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Unit>}
      */
-    async addUnit(req, res) {
+    async addUnit(req, res, next) {
         const newUnit = new Unit(req.body);
         const result = await newUnit.insertOne();
         
@@ -54,12 +63,15 @@ const unitController = {
 
             debug(unit);
             res.status(200).json(unit);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour supprimer une unité
+     * Method to delete unit
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      */
-    async deleteIngredient(req, res) {
+    async deleteIngredient(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -69,7 +81,7 @@ const unitController = {
         if(result) {
             debug(result);
             res.sendStatus(200);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
 }
 

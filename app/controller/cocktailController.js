@@ -4,17 +4,20 @@ const ExpressError = require('../service/ExpressError');
 const assert = require('assert')
 
 /**
- * cocktail est composé de 2 propriétés: name, details
+ * cocktail is composed of 2 properties: name, details
  * @typedef {Object} Cocktail
- * @property {String} name nom du cocktail
- * @property {Array} details les details de la recette du cocktail
+ * @property {String} name cocktail name
+ * @property {Array} details cocktail recipe details
  */
 const cocktailController = {
     /**
-     * Méthode pour retourner une liste de cocktails
+     * Method to return a list of cocktails
+     * @param {*} _ unused parameter
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Cocktail>}
      */
-    async getAllCocktails(_, res) {
+    async getAllCocktails(_, res, next) {
         const results = await Cocktail.getAll();
         
         if(results) {
@@ -22,13 +25,16 @@ const cocktailController = {
         
             debug(cocktails);
             res.status(200).json(cocktails);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour retourner un Cocktail
+     * Method to return a cocktail
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Cocktail}
      */
-    async getCocktailById(req, res) {
+    async getCocktailById(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -40,13 +46,16 @@ const cocktailController = {
 
             debug(cocktail);
             res.status(200).json(cocktail);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour ajouter un cocktail, puis retourne une liste de cocktails à jour
+     * Method to add a cocktail, then return an updated cocktail list
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Cocktail>}
      */
-    async addCocktail(req, res) {
+    async addCocktail(req, res, next) {
         const newCocktail = new Cocktail(req.body);
         const result = await newCocktail.insertOne();
         
@@ -55,13 +64,16 @@ const cocktailController = {
 
             debug(result);
             res.status(200).json(cocktails);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour modifier un cocktail, puis retourne une liste de cocktails à jour
+     * Method to modify a cocktail, then return an updated cocktail list
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      * @returns {Array.<Cocktail>}
      */
-    async editCocktail(req, res) {
+    async editCocktail(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -74,12 +86,15 @@ const cocktailController = {
 
             debug(result);
             res.status(200).json(cocktails);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
     /**
-     * Méthode pour supprimer un cocktail
+     * Method to delete a cocktail
+     * @param {express.Request} req Express request object
+     * @param {express.Response} res Express response object
+     * @param {express.NextFunction} next Express response function
      */
-    async deleteCocktail(req, res) {
+    async deleteCocktail(req, res, next) {
         const { id } = req.params;
 
         assert.ok(!isNaN(id), 'id must be a number!');
@@ -89,7 +104,7 @@ const cocktailController = {
         debug(result);
         if(result) {
             res.sendStatus(200);
-        } else throw new ExpressError('not found', 404);
+        } else next();
     },
 }
 

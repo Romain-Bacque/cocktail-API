@@ -9,33 +9,39 @@ const router = express.Router();
 router.route('/')
     /**
      * GET /ingredients
-     * @summary récupère la liste des ingredients
+     * @summary get the ingreddients list
      * @tag GET
      * @returns {Array.<Ingredient>} 200 - success response - application/json
      */
     .get(catchAsync(ingredientController.getAllIngredients))
     /**
      * POST /ingredients
-     * @summary ajoute un nouvel ingredient
+     * @summary add a new ingredient
      * @tag POST
      * @param {Ingredient} request.body
      * @returns {} 200 - success response - application/json
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     .post(validate(ingredientSchema), catchAsync(ingredientController.addIngredient))
 
 router.route('/:id')
     /**
      * GET /ingredients/:id
-     * @summary recupère un ingredient grâce à son id
+     * @summary get a ingredient thanks to its id
      * @tag GET
      * @returns {Ingredient} 200 - success response - application/json
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     .get(catchAsync(ingredientController.getIngredientById))
     /**
      * DELETE /ingredients/:id
-     * @summary supprime un ingredient grâce à son id
+     * @summary delete a ingredient thanks to its id
      * @tag DELETE
      * @returns {} 200 - success response - application/json
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     .delete(catchAsync(ingredientController.deleteIngredient));
 

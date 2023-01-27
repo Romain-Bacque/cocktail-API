@@ -10,16 +10,13 @@ router.use('/ingredients', ingredientRouter);
 router.use('/units', unitRouter);
 
 /**
- * gestion de la 404
+ * handle 404
  */
  router.use(errorHandler.notFound);
 
  /**
-  * gestion des erreurs
+  * handle Express errors
   */
  router.use(errorHandler.manage);
 
 module.exports = router;
-
-
-

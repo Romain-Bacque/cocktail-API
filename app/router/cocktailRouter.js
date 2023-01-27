@@ -10,14 +10,14 @@ const router = express.Router();
 router.route('/')
     /**
      * GET /cocktails
-     * @summary récupère la liste des cocktails
+     * @summary get the cocktails list
      * @tag GET
      * @returns {Array.<Cocktail>} 200 - success response - application/json
      */
     .get(catchAsync(cocktailController.getAllCocktails))
     /**
      * POST /cocktails
-     * @summary ajoute un nouveau cocktail
+     * @summary add a new cocktail
      * @tag POST
      * @param {Cocktail} request.body
      * @returns {} 200 - success response - application/json
@@ -27,24 +27,30 @@ router.route('/')
 router.route('/:id')
     /**
      * GET /cocktails/:id
-     * @summary recupère un cocktail grâce à son id
+     * @summary get a cocktail thanks to its id
      * @tag GET
      * @returns {Cocktail} 200 - success response - application/json
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     .get(catchAsync(cocktailController.getCocktailById))
     /**
      * PUT /cocktails/:id
-     * @summary modifie un cocktail grâce à son id
+     * @summary edit a cocktail thanks to its id
      * @tag PUT
      * @param {Cocktail} request.body
      * @returns {Array.<Cocktail>} 200 - success response - application/json
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     .put(validate(cocktailSchema), catchAsync(cocktailController.editCocktail))
     /**
      * DELETE /cocktails/:id
-     * @summary supprime un cocktail grâce à son id
+     * @summary delete a cocktail thanks to its id
      * @tag DELETE
      * @returns {} 200 - success response - application/json
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     .delete(catchAsync(cocktailController.deleteCocktail));
 
