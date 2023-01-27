@@ -4,7 +4,7 @@ const ExpressError = require('../service/ExpressError');
 const assert = require('assert')
 
 /**
- * cocktail is composed of 2 properties: name, details
+ * Cocktail is composed of 2 properties: name, details
  * @typedef {Object} Cocktail
  * @property {String} name cocktail name
  * @property {Array} details cocktail recipe details
