@@ -4,17 +4,19 @@ const path = require("path");
 
 const errorHandler = {
     /**
-     * Méthode de déclenchement d'une erreur si erreur 404
+     * Method that throw an error 404, Express error middleware will deal with it
      */
     notFound() {
         throw new ExpressError("Not Found", 404);
     },
     /**
      * 
-     * @param {Error} err erreur remonté par le système
-     * @param {*} _ paramètre inutilisé
-     * @param {Object} res reponse d'Express
-     * @param {*} __ paramètre inutilisé
+     * @param {Error} err error reported by the system
+     * @param {*} _ unused parameter
+     * @param {Express.Response} res Express Response
+     * @param {*} __ unused parameter
+     * @returns {} 404 - not found
+     * @returns {} 500 - internal server error
      */
     manage(err, _, res, __) {
         const now = new Date();
@@ -28,10 +30,10 @@ const errorHandler = {
         
         switch (err.statusCode) {
             case 404:
-                res.status(404).json({ error: "Not found" });
+                res.sendStatus(404);
                 break;
             default:
-                res.status(500).json({ error: "Internal error" });
+                res.sendStatus(500);
                 break;
         }
 

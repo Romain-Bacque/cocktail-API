@@ -3,6 +3,7 @@ const { Client } = require("pg");
 const database = process.env.PGDATABASE;
 
 const client = new Client();
+
 client.connect(err => {
     if (err) {
         debug('connection error', err.stack)
