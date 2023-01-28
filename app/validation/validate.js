@@ -1,3 +1,4 @@
+const debug = require("debug")("validate");
 const ExpressError = require("../service/ExpressError");
 const express = require("express");
 const joi = require("joi");
@@ -12,6 +13,7 @@ module.exports.validate = (schema) => {
     const { error } = schema.validate(req.body);
 
     if (error) {
+      debug(error);
       const msg = error.details.map((el) => el.message).join(", ");
       throw new ExpressError(msg, 400);
     } else {

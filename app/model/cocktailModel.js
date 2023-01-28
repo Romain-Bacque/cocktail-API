@@ -35,11 +35,12 @@ class Cocktail extends CoreModel {
     if (value.length > 0) {
       value.forEach((element) => {
         if (
-          "ingredient" in element === false ||
+          ("ingredient" in element === false &&
+            "ingredient_id" in element === false) ||
           "quantity" in element === false
         ) {
           throw new ExpressError(
-            "details must have object(s) with two keys: 'ingredient' and 'quantity'.",
+            "details must have object(s) with two keys: 'ingredient' or 'ingredient_id', and 'quantity'.",
             400
           );
         }
@@ -71,7 +72,7 @@ class Cocktail extends CoreModel {
     const result = await client.query(query);
 
     if (result.rowCount > 0) {
-      return result;
+      return result.rows;
     } else return null;
   }
 
@@ -83,7 +84,7 @@ class Cocktail extends CoreModel {
     const result = await client.query(query);
 
     if (result.rowCount > 0) {
-      return result.rows[0];
+      return result.rows;
     } else return null;
   }
 

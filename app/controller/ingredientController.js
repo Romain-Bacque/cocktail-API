@@ -15,7 +15,8 @@ const ingredientController = {
 
     if (results) {
       const ingredients = results.map((result) => ({
-        ingredient: result.name,
+        id: result.id,
+        name: result.name,
         unit: result.unit,
       }));
 
@@ -36,7 +37,11 @@ const ingredientController = {
     const result = await Ingredient.getById(id);
 
     if (result) {
-      const ingredient = { ingredient: result.name, unit: result.unit };
+      const ingredient = {
+        id: result.id,
+        name: result.name,
+        unit: result.unit,
+      };
 
       res.status(200).json(ingredient);
     } else next();

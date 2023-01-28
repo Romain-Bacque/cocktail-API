@@ -57,9 +57,7 @@ class Ingredient extends CoreModel {
     };
     const result = await client.query(query);
 
-    if (result.rowCount > 0) {
-      return result;
-    } else return null;
+    return result.rowCount > 0;
   }
 
   static async deleteOne(id) {

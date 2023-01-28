@@ -12,9 +12,9 @@
     "swagger-jsdoc": "^6.2.5"
   },
   "scripts": {
-    "start": "DEBUG='server, controller, SGBD' nodemon server.js"
+    "start": "DEBUG='server, controller, SGBD, validate' nodemon server.js"
   },
-  "name": "cocktailAPI",
+  "name": "cocktail-api",
   "version": "1.0.0",
   "main": "server.js",
   "keywords": [],

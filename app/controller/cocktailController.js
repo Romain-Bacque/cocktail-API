@@ -15,6 +15,7 @@ const cocktailController = {
 
     if (results) {
       const cocktails = results.map((result) => ({
+        id: result.id,
         name: result.name,
         details: result.details,
       }));
@@ -36,7 +37,11 @@ const cocktailController = {
     const result = await Cocktail.getById(id);
 
     if (result) {
-      const cocktail = { cocktail: result.name, details: result.details };
+      const cocktail = {
+        id: result.id,
+        name: result.name,
+        details: result.details,
+      };
 
       res.status(200).json(cocktail);
     } else next();
@@ -48,13 +53,11 @@ const cocktailController = {
    * @param {express.NextFunction} next Express response function
    */
   async addCocktail(req, res, next) {
-    const newCocktail = new Cocktail(req.body);
-    const result = await newCocktail.insertOne();
+    const cocktail = new Cocktail(req.body);
+    const results = await cocktail.insertOne();
 
-    if (result) {
-      const cocktails = { cocktail: result.cocktail, details: result.details };
-
-      res.status(200).json(cocktails);
+    if (results) {
+      res.status(200).json(results);
     } else next();
   },
   /**
@@ -68,13 +71,11 @@ const cocktailController = {
 
     assert.ok(!isNaN(id), "id must be a number!");
 
-    const newCocktail = new Cocktail(req.body);
-    const result = await newCocktail.updateOne(id);
+    const cocktail = new Cocktail({ id, ...req.body });
+    const results = await cocktail.updateOne();
 
-    if (result) {
-      const cocktails = { cocktail: result.cocktail, details: result.details };
-
-      res.status(200).json(cocktails);
+    if (results) {
+      res.status(200).json(results);
     } else next();
   },
   /**

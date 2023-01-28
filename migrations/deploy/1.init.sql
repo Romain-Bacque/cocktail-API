@@ -43,6 +43,7 @@ CREATE TYPE packed AS (
 );
 
 CREATE TYPE packed2 AS (
+    id INT,
 	name TEXT,
 	unit TEXT
 );	

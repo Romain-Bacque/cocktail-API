@@ -52,9 +52,7 @@ const unitController = {
     const result = await newUnit.insertOne();
 
     if (result) {
-      const unit = { id: result.id, title: result.title };
-
-      res.status(200).json(unit);
+      res.sendStatus(200);
     } else next();
   },
   /**

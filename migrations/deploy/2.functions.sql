@@ -31,47 +31,53 @@ CREATE FUNCTION get_cocktail_details(INT) RETURNS SETOF packed AS $$
 $$ LANGUAGE SQL STRICT;
 
 
-CREATE OR REPLACE FUNCTION insert_cocktail(json) RETURNS SETOF cocktail_has_ingredient AS $$
+CREATE OR REPLACE FUNCTION insert_cocktail(json) RETURNS SETOF packed AS $$
 
 DECLARE id_cocktail INT;
 
 BEGIN
 
-INSERT INTO "cocktail" ("name") VALUES ( $1 ->> 'name'::text ) 
-RETURNING ("cocktail"."id") into id_cocktail;
+    INSERT INTO "cocktail" ("name") VALUES ( $1 ->> 'name'::text ) 
+    RETURNING ("cocktail"."id") into id_cocktail;
 
-RETURN QUERY
-INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity")
-    SELECT id_cocktail, recipe.ingredient_id, recipe.quantity
-        FROM (
-            SELECT * FROM json_to_recordset( ( $1 ->> 'details' )::json ) as recipe("ingredient_id" INT, "quantity" INT)
-        ) as recipe
-    RETURNING "cocktail_has_ingredient".*;
-    
+    INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity")
+        SELECT id_cocktail, recipe.ingredient_id, recipe.quantity
+            FROM (
+                SELECT * FROM json_to_recordset( ( $1 ->> 'details' )::json ) as recipe("ingredient_id" INT, "quantity" INT)
+            ) as recipe;
+
+    RETURN QUERY
+    SELECT * FROM get_cocktails_details();    
 END;
 
 $$ LANGUAGE PLPGSQL STRICT;
 
 
-CREATE OR REPLACE FUNCTION update_cocktail(json) RETURNS SETOF cocktail_has_ingredient AS $$
+CREATE OR REPLACE FUNCTION update_cocktail(json) RETURNS SETOF packed AS $$
 
-DECLARE id_cocktail INT;
+DECLARE cocktailId INT;
 
 BEGIN
 
-UPDATE "cocktail" SET "name" = ($1 ->> 'name')::text WHERE "id" = ($1 ->> 'id')::int
-RETURNING ("cocktail"."id") into id_cocktail;
+    SELECT "id" FROM "cocktail" WHERE "id" = ($1 ->> 'id')::int INTO cocktailId;
 
-DELETE FROM "cocktail_has_ingredient"
-WHERE "cocktail_has_ingredient"."cocktail_id" = id_cocktail;
+    IF cocktailId IS NULL THEN
+        RETURN;
+    ELSE
+        UPDATE "cocktail" SET "name" = ($1 ->> 'name')::text WHERE "id" = cocktailId;
 
-RETURN QUERY
-INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity")
-SELECT id_cocktail, recipe.ingredient_id, recipe.quantity
-FROM (
-SELECT * FROM json_to_recordset( ( $1 ->> 'details' )::json ) as recipe("ingredient_id" INT, "quantity" INT)
-) as recipe
-RETURNING "cocktail_has_ingredient".*;
+        DELETE FROM "cocktail_has_ingredient"
+        WHERE "cocktail_has_ingredient"."cocktail_id" = cocktailId;
+
+        INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity")
+        SELECT cocktailId, recipe.ingredient_id, recipe.quantity
+        FROM (
+            SELECT * FROM json_to_recordset( ( $1 ->> 'details' )::json ) as recipe("ingredient_id" INT, "quantity" INT)
+        ) as recipe;
+
+        RETURN QUERY
+        SELECT * FROM get_cocktails_details();
+    END IF;
 
 END;
 
@@ -82,7 +88,7 @@ $$ LANGUAGE PLPGSQL STRICT;
 
 CREATE FUNCTION get_ingredients_details () RETURNS SETOF packed2 AS $$
 
-SELECT name, title FROM ingredient i
+SELECT i.id, name, title FROM ingredient i
 JOIN unit u
 ON i.unit_id = u.id
 
@@ -91,7 +97,7 @@ $$ LANGUAGE SQL;
 
 CREATE FUNCTION get_ingredient_details (INT) RETURNS SETOF packed2 AS $$
 
-SELECT name, title FROM ingredient i
+SELECT i.id, name, title FROM ingredient i
 JOIN unit u
 ON i.unit_id = u.id
 WHERE i.id = $1;
