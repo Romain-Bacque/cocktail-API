@@ -39,7 +39,7 @@ class Cocktail extends CoreModel {
           "quantity" in element === false
         ) {
           throw new ExpressError(
-            "details must have two keys: 'ingredient' and 'quantity'.",
+            "details must have object(s) with two keys: 'ingredient' and 'quantity'.",
             400
           );
         }
