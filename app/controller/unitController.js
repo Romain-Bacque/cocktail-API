@@ -48,8 +48,8 @@ const unitController = {
    * @param {express.NextFunction} next Express response function
    */
   async addUnit(req, res, next) {
-    const newUnit = new Unit(req.body);
-    const result = await newUnit.insertOne();
+    const unit = new Unit(req.body);
+    const result = await unit.insertOne();
 
     if (result) {
       res.sendStatus(200);
@@ -61,7 +61,7 @@ const unitController = {
    * @param {express.Response} res Express response object
    * @param {express.NextFunction} next Express response function
    */
-  async deleteIngredient(req, res, next) {
+  async deleteUnit(req, res, next) {
     const { id } = req.params;
 
     assert.ok(!isNaN(id), "id must be a number!");

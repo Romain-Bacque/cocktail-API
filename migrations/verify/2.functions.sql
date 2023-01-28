@@ -29,6 +29,6 @@ SELECT "id", "name", "details" from update_cocktail('{
 
 SELECT "id", "name", "unit" FROM get_ingredients_details();
 
-SELECT "id", "name", "unit" FROM insert_ingredient('{"name": "test3", "unit": "u"}');
+SELECT "id", "name", "unit" FROM insert_ingredient('{"name": "test3", "unitId": "1"}');
 
 ROLLBACK;

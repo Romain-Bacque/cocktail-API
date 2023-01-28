@@ -53,13 +53,11 @@ const ingredientController = {
    * @param {express.NextFunction} next Express response function
    */
   async addIngredient(req, res, next) {
-    const newIngredient = new Ingredient(req.body);
-    const result = await newIngredient.insertOne();
+    const ingredient = new Ingredient(req.body);
+    const results = await ingredient.insertOne();
 
-    if (result) {
-      const ingredients = { ingredient: result.ingredient, unit: result.unit };
-
-      res.status(200).json(ingredients);
+    if (results) {
+      res.status(200).json(results);
     } else next();
   },
   /**

@@ -16,7 +16,7 @@ module.exports.cocktailSchema = joi
 module.exports.ingredientSchema = joi
   .object({
     name: joi.string().required(),
-    unit_id: joi.number().required(),
+    unitId: joi.number().required(),
   })
   .required();
 

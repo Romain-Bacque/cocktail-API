@@ -25,7 +25,7 @@ router
   .post(validate(cocktailSchema), catchAsync(cocktailController.addCocktail));
 
 router
-  .route("/:id")
+  .route("/:id([0-9]+)")
   /**
    * GET /cocktails/:id
    * @summary get a cocktail thanks to its id

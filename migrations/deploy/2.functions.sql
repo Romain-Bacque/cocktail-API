@@ -3,8 +3,7 @@
 BEGIN;
 
 -- cocktail
-
-CREATE FUNCTION get_cocktails_details() RETURNS SETOF packed AS $$
+CREATE OR REPLACE FUNCTION get_cocktails_details() RETURNS SETOF packed AS $$
 
     SELECT "cocktail_details"."id", "cocktail_details"."name", array_agg(
 		json_build_object(
@@ -17,7 +16,7 @@ CREATE FUNCTION get_cocktails_details() RETURNS SETOF packed AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE FUNCTION get_cocktail_details(INT) RETURNS SETOF packed AS $$
+CREATE OR REPLACE FUNCTION get_cocktail_details(INT) RETURNS SETOF packed AS $$
 
     SELECT "cocktail_details"."id", "cocktail_details"."name", array_agg(
             json_build_object(
@@ -85,8 +84,7 @@ $$ LANGUAGE PLPGSQL STRICT;
 
 
 -- ingredient
-
-CREATE FUNCTION get_ingredients_details () RETURNS SETOF packed2 AS $$
+CREATE OR REPLACE FUNCTION get_ingredients_details () RETURNS SETOF packed2 AS $$
 
 SELECT i.id, name, title FROM ingredient i
 JOIN unit u
@@ -95,7 +93,7 @@ ON i.unit_id = u.id
 $$ LANGUAGE SQL;
 
 
-CREATE FUNCTION get_ingredient_details (INT) RETURNS SETOF packed2 AS $$
+CREATE OR REPLACE FUNCTION get_ingredient_details (INT) RETURNS SETOF packed2 AS $$
 
 SELECT i.id, name, title FROM ingredient i
 JOIN unit u
@@ -105,23 +103,23 @@ WHERE i.id = $1;
 $$ LANGUAGE SQL;
 
 
-CREATE FUNCTION insert_ingredient (JSON) RETURNS SETOF packed2 AS $$
+CREATE OR REPLACE FUNCTION insert_ingredient (JSON) RETURNS SETOF packed2 AS $$
 
-DECLARE id_unit INT;
+DECLARE unitId INT;
 
 BEGIN
 
-INSERT INTO "ingredient" ("name", "unit_id")
-SELECT i.name, (
-SELECT u."id" as "unit_id"
-FROM "unit" u
-WHERE u."title" = i."unit"
-)
-FROM json_to_record($1) AS i(name TEXT, unit TEXT)
-RETURNING "unit_id" into id_unit;
+    INSERT INTO "ingredient" ("name", "unit_id")
+    SELECT i.name, (
+    SELECT u."id" as "unit_id"
+    FROM "unit" u
+    WHERE u."id" = ($1 ->> 'unitId')::int
+    )
+    FROM json_to_record($1) AS i(name TEXT, unit TEXT)
+    RETURNING "unit_id" into unitId;
 
-RETURN QUERY
-SELECT * FROM get_ingredient_details(id_unit);
+    RETURN QUERY
+    SELECT * FROM get_ingredients_details();
 
 END;
 

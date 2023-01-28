@@ -6,11 +6,13 @@ class Ingredient extends CoreModel {
   static tableName = "ingredient";
   #name;
   #unit;
+  #unitId;
 
   constructor(config) {
     super(config);
     this.name = config.name;
     this.unit = config.unit;
+    this.unitId = config.unitId;
   }
 
   get name() {
@@ -29,11 +31,25 @@ class Ingredient extends CoreModel {
   }
 
   set unit(value) {
+    if (!value) return;
     if (typeof value !== "string") {
       throw new ExpressError("unit must be a string!", 400);
     }
 
     this.#unit = value;
+  }
+
+  get unitId() {
+    return this.#unitId;
+  }
+
+  set unitId(value) {
+    if (!value) return;
+    if (typeof value !== "number") {
+      throw new ExpressError("unit must be a number!", 400);
+    }
+
+    this.#unitId = value;
   }
 
   static async getById(id) {
@@ -52,12 +68,14 @@ class Ingredient extends CoreModel {
 
   async insertOne() {
     const query = {
-      text: `SELECT * FROM "insert_cocktail"($1);`,
-      values: [{ name: this.name, unit: this.unit }],
+      text: `SELECT * FROM "insert_ingredient"($1);`,
+      values: [{ name: this.name, unitId: this.unitId }],
     };
     const result = await client.query(query);
 
-    return result.rowCount > 0;
+    if (result.rowCount > 0) {
+      return result.rows;
+    } else return null;
   }
 
   static async deleteOne(id) {
