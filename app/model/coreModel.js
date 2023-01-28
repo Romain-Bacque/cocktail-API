@@ -1,4 +1,4 @@
-const client = require('../service/pgClient');
+const client = require("../service/pgClient");
 
 class CoreModel {
   #id;
@@ -27,13 +27,17 @@ class CoreModel {
 
   static async getAll() {
     const query = {
-      text: this.tableName !== 'unit' ? `SELECT * FROM "get_${this.tableName}s_details"();` : `SELECT * FROM "unit";`
-    }
+      text:
+        this.tableName !== "unit"
+          ? `SELECT * FROM "get_${this.tableName}s_details"();`
+          : `SELECT * FROM "unit";`,
+    };
     const result = await client.query(query);
 
     if (result.rowCount > 0) {
       const rows = result.rows;
       const items = [];
+
       for (const row of rows) {
         items.push(new this(row));
       }

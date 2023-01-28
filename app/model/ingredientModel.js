@@ -1,77 +1,77 @@
-const client = require('../service/pgClient');
+const client = require("../service/pgClient");
 const CoreModel = require("./coreModel");
-const ExpressError = require('../service/ExpressError')
+const ExpressError = require("../service/ExpressError");
 
 class Ingredient extends CoreModel {
-    static tableName = "ingredient";
-    #name;
-    #unit;
+  static tableName = "ingredient";
+  #name;
+  #unit;
 
-    constructor(config) {
-        super(config);
-        this.name = config.name;
-        this.unit = config.unit;
+  constructor(config) {
+    super(config);
+    this.name = config.name;
+    this.unit = config.unit;
+  }
+
+  get name() {
+    return this.#name;
+  }
+
+  set name(value) {
+    if (typeof value !== "string") {
+      throw new ExpressError("name must be a string!", 400);
+    }
+    this.#name = value;
+  }
+
+  get unit() {
+    return this.#unit;
+  }
+
+  set unit(value) {
+    if (typeof value !== "string") {
+      throw new ExpressError("unit must be a string!", 400);
     }
 
-    get name() {
-        return this.#name;
-    }
+    this.#unit = value;
+  }
 
-    set name(value) {
-        if(typeof value !== 'string') {
-            throw new ExpressError("name must be a string!", 400);
-        }
-        this.#name = value;
-    }
+  static async getById(id) {
+    const query = {
+      text: `SELECT * FROM "get_ingredient_details"($1);`,
+      values: [id],
+    };
+    const result = await client.query(query);
 
-    get unit() {
-        return this.#unit;
-    }
+    if (result.rowCount > 0) {
+      const ingredient = new this(result.rows[0]);
 
-    set unit(value) {
-        if(typeof value !== 'string') {
-            throw new ExpressError("unit must be a string!", 400);
-        }
+      return ingredient;
+    } else return null;
+  }
 
-        this.#unit = value;
-    }
+  async insertOne() {
+    const query = {
+      text: `SELECT * FROM "insert_cocktail"($1);`,
+      values: [{ name: this.name, unit: this.unit }],
+    };
+    const result = await client.query(query);
 
-    static async getById(id) {
-        const query = {
-            text: `SELECT * FROM "get_ingredient_details"($1);`,
-            values: [id]
-        };
-        const result = await client.query(query);
+    if (result.rowCount > 0) {
+      return result;
+    } else return null;
+  }
 
-        if(result.rowCount > 0) {
-            const test =  new this(result.rows[0]);
-            return test
-        } else return null;
-    }
+  static async deleteOne(id) {
+    const query = {
+      text: `DELETE FROM "ingredient" WHERE "id" = $1;`,
+      values: [id],
+    };
 
-    async insertOne() {
-        const query = {
-            text: `SELECT * FROM "insert_cocktail"($1);`,
-            values: [{ name: this.name, unit: this.unit }]
-        };
-        const result = await client.query(query);
+    const result = await client.query(query);
 
-        if(result.rowCount > 0) {
-
-            return result;
-        } else return null;
-    }
-
-    static async deleteOne(id) {
-        const query = {
-            text: `DELETE FROM "ingredient" WHERE "id" = $1;`,
-            values: [id]
-        };
-
-        const result = await client.query(query);
-
-        return result.rowCount > 0;
-    }
+    return result.rowCount > 0;
+  }
 }
 
 module.exports = Ingredient;

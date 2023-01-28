@@ -1,62 +1,62 @@
-const client = require('../service/pgClient');
+const client = require("../service/pgClient");
 const CoreModel = require("./coreModel");
-const ExpressError = require('../service/ExpressError')
+const ExpressError = require("../service/ExpressError");
 
-class Cocktail extends CoreModel {
-    static tableName = "unit";
-    #title;
+class Unit extends CoreModel {
+  static tableName = "unit";
+  #title;
 
-    constructor(config) {
-        super(config);
-        this.title = config.title;
+  constructor(config) {
+    super(config);
+    this.title = config.title;
+  }
+
+  get title() {
+    return this.#title;
+  }
+
+  set title(value) {
+    if (typeof value !== "string") {
+      throw new ExpressError("title must be a string!", 400);
     }
+    this.#title = value;
+  }
 
-    get title() {
-        return this.#title;
-    }
+  static async getById(id) {
+    const query = {
+      text: `SELECT * FROM "unit" WHERE "id" = $1;`,
+      values: [id],
+    };
+    const result = await client.query(query);
 
-    set title(value) {
-        if(typeof value !== 'string') {
-            throw new ExpressError("title must be a string!", 400);
-        }
-        this.#title = value;
-    }
+    if (result.rowCount > 0) {
+      const unit = new this(result.rows[0]);
+      return unit;
+    } else return null;
+  }
 
-    static async getById(id) {
-        const query = {
-            text: `SELECT * FROM "unit" WHERE "id" = $1;`,
-            values: [id]
-        };
-        const result = await client.query(query);
+  async insertOne() {
+    const query = {
+      text: `INSERT INTO "unit" ("title") VALUES ($1) RETURNING "id", "title";`,
+      values: [this.title],
+    };
+    const result = await client.query(query);
 
-        if(result.rowCount > 0) {
-            const test =  new this(result.rows[0]);
-            return test
-        } else return null;
-    }
+    if (result.rowCount > 0) {
+      return result.rows[0];
+    } else return null;
+  }
 
-    async insertOne() {
-        const query = {
-            text: `INSERT INTO "unit" ("title") VALUES ($1) RETURNING "id", "title";`,
-            values: [this.title]
-        };
-        const result = await client.query(query);
+  static async deleteOne(id) {
+    const query = {
+      text: `DELETE FROM "unit" WHERE "id" = $1;`,
+      values: [id],
+    };
 
-        if(result.rowCount > 0) {
-            return result.rows[0];
-        } else return null;
-    }
+    const result = await client.query(query);
 
-    static async deleteOne(id) {
-        const query = {
-            text: `DELETE FROM "unit" WHERE "id" = $1;`,
-            values: [id]
-        };
-        
-        const result = await client.query(query);
-
-        return result.rowCount > 0;
-    }
+    return result.rowCount > 0;
+  }
 }
 
-module.exports = Cocktail;
+module.exports = Unit;
