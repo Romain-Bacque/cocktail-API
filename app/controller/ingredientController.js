@@ -19,7 +19,6 @@ const ingredientController = {
         unit: result.unit,
       }));
 
-      debug(ingredients);
       res.status(200).json(ingredients);
     } else next();
   },
@@ -39,7 +38,6 @@ const ingredientController = {
     if (result) {
       const ingredient = { ingredient: result.name, unit: result.unit };
 
-      debug(ingredient);
       res.status(200).json(ingredient);
     } else next();
   },
@@ -56,7 +54,6 @@ const ingredientController = {
     if (result) {
       const ingredients = { ingredient: result.ingredient, unit: result.unit };
 
-      debug(result);
       res.status(200).json(ingredients);
     } else next();
   },
@@ -73,7 +70,6 @@ const ingredientController = {
 
     const result = await Ingredient.deleteOne(id);
 
-    debug(result);
     if (result) {
       res.sendStatus(200);
     } else next();

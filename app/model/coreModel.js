@@ -41,7 +41,6 @@ class CoreModel {
       for (const row of rows) {
         items.push(new this(row));
       }
-
       return items;
     } else return null;
   }

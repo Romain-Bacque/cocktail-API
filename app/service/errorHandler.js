@@ -24,7 +24,7 @@ const errorHandler = {
     const fileName = `${now.getFullYear()}-${
       now.getMonth() + 1
     }-${now.getDate()}.log`;
-    const filePath = path.join(__dirname, `../../log/${fileName}`);
+    const filePath = path.join(__dirname, `../../logs/${fileName}`);
 
     const errorMessage = now.getHours() + "h - " + err + "\r";
     // Creation of log file

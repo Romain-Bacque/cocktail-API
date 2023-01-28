@@ -19,7 +19,6 @@ const cocktailController = {
         details: result.details,
       }));
 
-      debug(cocktails);
       res.status(200).json(cocktails);
     } else next();
   },
@@ -39,7 +38,6 @@ const cocktailController = {
     if (result) {
       const cocktail = { cocktail: result.name, details: result.details };
 
-      debug(cocktail);
       res.status(200).json(cocktail);
     } else next();
   },
@@ -56,7 +54,6 @@ const cocktailController = {
     if (result) {
       const cocktails = { cocktail: result.cocktail, details: result.details };
 
-      debug(result);
       res.status(200).json(cocktails);
     } else next();
   },
@@ -77,7 +74,6 @@ const cocktailController = {
     if (result) {
       const cocktails = { cocktail: result.cocktail, details: result.details };
 
-      debug(result);
       res.status(200).json(cocktails);
     } else next();
   },
@@ -94,7 +90,6 @@ const cocktailController = {
 
     const result = await Cocktail.deleteOne(id);
 
-    debug(result);
     if (result) {
       res.sendStatus(200);
     } else next();
