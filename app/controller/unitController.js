@@ -19,7 +19,6 @@ const unitController = {
         title: result.title,
       }));
 
-      debug(units);
       res.status(200).json(units);
     } else next();
   },
@@ -39,7 +38,6 @@ const unitController = {
     if (result) {
       const unit = { id: result.id, title: result.title };
 
-      debug(unit);
       res.status(200).json(unit);
     } else next();
   },
@@ -56,7 +54,6 @@ const unitController = {
     if (result) {
       const unit = { id: result.id, title: result.title };
 
-      debug(unit);
       res.status(200).json(unit);
     } else next();
   },
@@ -74,7 +71,6 @@ const unitController = {
     const result = await Unit.deleteOne(id);
 
     if (result) {
-      debug(result);
       res.sendStatus(200);
     } else next();
   },

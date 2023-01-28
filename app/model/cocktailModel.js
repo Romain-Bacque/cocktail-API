@@ -32,8 +32,18 @@ class Cocktail extends CoreModel {
     if (typeof value !== "object") {
       throw new ExpressError("details must be an object!", 400);
     }
-    if (Object.keys(value).length !== 2) {
-      throw new ExpressError("details must have two keys!", 400);
+    if (value.length > 0) {
+      value.forEach((element) => {
+        if (
+          "ingredient" in element === false ||
+          "quantity" in element === false
+        ) {
+          throw new ExpressError(
+            "details must have two keys: 'ingredient' and 'quantity'.",
+            400
+          );
+        }
+      });
     }
 
     this.#details = value;

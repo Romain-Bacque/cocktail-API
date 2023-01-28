@@ -3,7 +3,7 @@ const express = require("express");
 const joi = require("joi");
 
 /**
- *
+ * function that validate schema
  * @param {joi.ObjectSchema} schema The joi object schema
  * @returns {((req: express.Request, _: any, next: express.NextFunction) => void)}
  */
