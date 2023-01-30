@@ -10,4 +10,7 @@ DROP FUNCTION IF EXISTS get_ingredients_details();
 DROP FUNCTION IF EXISTS get_ingredient_details(INT);
 DROP FUNCTION IF EXISTS insert_ingredient(JSON);
 
+DROP TYPE packed;
+DROP TYPE packed2;
+
 COMMIT;

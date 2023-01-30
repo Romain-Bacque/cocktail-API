@@ -2,6 +2,31 @@
 
 BEGIN;
 
+-- custom type (virtual table)
+CREATE TYPE packed AS (
+    id INT,
+    name TEXT,
+    details json[]
+);
+
+CREATE TYPE packed2 AS (
+    id INT,
+	name TEXT,
+	unit TEXT
+);	
+
+-- view (synthesis of an SQL query)
+CREATE VIEW cocktail_details AS (
+    SELECT cocktail.id,
+        cocktail.name AS name,
+        ingredient.name AS ingredient,
+        cocktail_has_ingredient.quantity || unit.title AS quantity
+        FROM cocktail
+            JOIN cocktail_has_ingredient ON cocktail_has_ingredient.cocktail_id = cocktail.id
+            JOIN ingredient ON cocktail_has_ingredient.ingredient_id = ingredient.id
+            JOIN unit ON ingredient.unit_id = unit.id
+);
+
 -- cocktail
 CREATE OR REPLACE FUNCTION get_cocktails_details() RETURNS SETOF packed AS $$
 
