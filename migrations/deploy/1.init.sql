@@ -35,14 +35,13 @@ CREATE TABLE IF NOT EXISTS "unit" (
 ALTER TABLE IF EXISTS "ingredient"
     ADD FOREIGN KEY ("unit_id") REFERENCES "unit"("id") ON DELETE CASCADE;
 
-
+-- custom type
 CREATE TYPE packed AS (
     id INT,
     name TEXT,
     details json[]
 );
 
--- custom type
 CREATE TYPE packed2 AS (
     id INT,
 	name TEXT,
