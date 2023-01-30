@@ -1,5 +1,3 @@
--- Deploy cocktail:1.init to pg
-
 BEGIN;
 
 DROP TABLE IF EXISTS "cocktail", "ingredient", "cocktail_has_ingredient", "unit";
@@ -46,6 +44,7 @@ CREATE TYPE packed AS (
 
 -- custom type
 CREATE TYPE packed2 AS (
+    id INT,
 	name TEXT,
 	unit TEXT
 );	
