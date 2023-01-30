@@ -44,11 +44,13 @@ CREATE TYPE packed AS (
     details json[]
 );
 
+-- custom type
 CREATE TYPE packed2 AS (
 	name TEXT,
 	unit TEXT
 );	
 
+-- view
 CREATE VIEW cocktail_details AS (
     SELECT cocktail.id,
         cocktail.name AS name,
