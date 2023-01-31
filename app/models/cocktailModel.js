@@ -1,4 +1,4 @@
-const client = require("../service/pgPool");
+const pool = require("../service/pgPool");
 const CoreModel = require("./coreModel");
 const ExpressError = require("../service/ExpressError");
 
@@ -55,7 +55,7 @@ class Cocktail extends CoreModel {
       text: `SELECT * FROM "get_cocktail_details"($1);`,
       values: [id],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       const cocktail = new this(result.rows[0]);
@@ -69,7 +69,7 @@ class Cocktail extends CoreModel {
       text: `SELECT * FROM "insert_cocktail"($1);`,
       values: [{ name: this.name, details: this.details }],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       return result.rows;
@@ -81,7 +81,7 @@ class Cocktail extends CoreModel {
       text: `SELECT * FROM "update_cocktail"($1);`,
       values: [{ id: this.id, name: this.name, details: this.details }],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       return result.rows;
@@ -94,7 +94,7 @@ class Cocktail extends CoreModel {
       values: [id],
     };
 
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     return result.rowCount > 0;
   }

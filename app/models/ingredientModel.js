@@ -1,4 +1,4 @@
-const client = require("../service/pgPool");
+const pool = require("../service/pgPool");
 const CoreModel = require("./coreModel");
 const ExpressError = require("../service/ExpressError");
 
@@ -57,7 +57,7 @@ class Ingredient extends CoreModel {
       text: `SELECT * FROM "get_ingredient_details"($1);`,
       values: [id],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       const ingredient = new this(result.rows[0]);
@@ -71,7 +71,7 @@ class Ingredient extends CoreModel {
       text: `SELECT * FROM "insert_ingredient"($1);`,
       values: [{ name: this.name, unitId: this.unitId }],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       return result.rows;
@@ -84,7 +84,7 @@ class Ingredient extends CoreModel {
       values: [id],
     };
 
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     return result.rowCount > 0;
   }

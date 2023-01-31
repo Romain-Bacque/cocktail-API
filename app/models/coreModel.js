@@ -1,4 +1,4 @@
-const client = require("../service/pgPool");
+const pool = require("../service/pgPool");
 
 class CoreModel {
   #id;
@@ -32,7 +32,7 @@ class CoreModel {
           ? `SELECT * FROM "get_${this.tableName}s_details"();`
           : `SELECT * FROM "unit";`,
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       const rows = result.rows;

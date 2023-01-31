@@ -1,4 +1,4 @@
-const client = require("../service/pgPool");
+const pool = require("../service/pgPool");
 const CoreModel = require("./coreModel");
 const ExpressError = require("../service/ExpressError");
 
@@ -27,7 +27,7 @@ class Unit extends CoreModel {
       text: `SELECT * FROM "unit" WHERE "id" = $1;`,
       values: [id],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     if (result.rowCount > 0) {
       const unit = new this(result.rows[0]);
@@ -40,7 +40,7 @@ class Unit extends CoreModel {
       text: `INSERT INTO "unit" ("title") VALUES ($1) RETURNING "id", "title";`,
       values: [this.title],
     };
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     return result.rowCount > 0;
   }
@@ -51,7 +51,7 @@ class Unit extends CoreModel {
       values: [id],
     };
 
-    const result = await client.query(query);
+    const result = await pool.query(query);
 
     return result.rowCount > 0;
   }
