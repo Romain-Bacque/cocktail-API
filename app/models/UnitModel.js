@@ -1,5 +1,5 @@
 const pool = require("../service/pgPool");
-const CoreModel = require("./coreModel");
+const CoreModel = require("./CoreModel");
 const ExpressError = require("../service/ExpressError");
 
 class Unit extends CoreModel {
