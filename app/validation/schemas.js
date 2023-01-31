@@ -3,21 +3,19 @@ const sanitizeHtml = require("sanitize-html");
 
 const extension = (joi) => ({
   type: "string",
-  base: joi.string(),
+  base: joi.string(), // extension is defined on joi.string()
   messages: {
     "string.escapeHTML": "{{#label}} must not include HTML!",
   },
   rules: {
     escapeHTML: {
-      validate(value, helpers) {
+      validate(value, helpers) { // Joi will automatically call this method for whatever value it will receive
         const clean = sanitizeHtml(value, {
-          allowedTags: [],
-          allowedAttributes: {},
+          allowedTags: [], // nothing is allowed
+          allowedAttributes: {}, // nothing is allowed
         });
-        if (clean == value) {
-          return clean;
-        }
-        return helpers.error("string.escapeHTML");
+        if (clean !== value) return helpers.error("string.escapeHTML");
+          return clean;      
       },
     },
   },
