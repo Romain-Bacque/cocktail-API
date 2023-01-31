@@ -1,5 +1,5 @@
 const express = require("express");
-const unitController = require("../controller/unitController");
+const unitController = require("../controllers/unitController");
 const catchAsync = require("../service/catchAsync");
 const { unitSchema } = require("../validation/schemas");
 const { validate } = require("../validation/validate");

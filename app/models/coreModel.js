@@ -1,4 +1,4 @@
-const client = require("../service/pgClient");
+const client = require("../service/pgPool");
 
 class CoreModel {
   #id;

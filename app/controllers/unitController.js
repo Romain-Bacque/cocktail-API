@@ -1,77 +1,72 @@
 const debug = require("debug")("controller");
-const { Ingredient } = require("../model");
+const { Unit } = require("../models");
 const assert = require("assert");
 const express = require("express");
 
-const ingredientController = {
+const unitController = {
   /**
-   * Method to return an ingredient list
+   * Method to return a list of units
    * @param {*} _ unused parameter
    * @param {express.Response} res Express response object
    * @param {express.NextFunction} next Express response function
    */
-  async getAllIngredients(_, res, next) {
-    const results = await Ingredient.getAll();
+  async getAllUnits(_, res, next) {
+    const results = await Unit.getAll();
 
     if (results) {
-      const ingredients = results.map((result) => ({
+      const units = results.map((result) => ({
         id: result.id,
-        name: result.name,
-        unit: result.unit,
+        title: result.title,
       }));
 
-      res.status(200).json(ingredients);
+      res.status(200).json(units);
     } else next();
   },
   /**
-   * Method to return an ingredient
+   * Method to return a unit
    * @param {express.Request} req Express request object
    * @param {express.Response} res Express response object
    * @param {express.NextFunction} next Express response function
    */
-  async getIngredientById(req, res, next) {
+  async getUnitById(req, res, next) {
     const { id } = req.params;
 
     assert.ok(!isNaN(id), "id must be a number!");
 
-    const result = await Ingredient.getById(id);
+    const result = await Unit.getById(id);
 
     if (result) {
-      const ingredient = {
-        id: result.id,
-        name: result.name,
-        unit: result.unit,
-      };
+      const unit = { id: result.id, title: result.title };
 
-      res.status(200).json(ingredient);
+      res.status(200).json(unit);
     } else next();
   },
   /**
-   * Method to add an ingredient, then return an updated ingredient list
+   * Method to add a unit, then return a list of updated units
    * @param {express.Request} req Express request object
    * @param {express.Response} res Express response object
    * @param {express.NextFunction} next Express response function
    */
-  async addIngredient(req, res, next) {
-    const ingredient = new Ingredient(req.body);
-    const results = await ingredient.insertOne();
+  async addUnit(req, res, next) {
+    const unit = new Unit(req.body);
+    const result = await unit.insertOne();
 
-    if (results) {
-      res.status(200).json(results);
+    if (result) {
+      res.sendStatus(200);
     } else next();
   },
   /**
-   * Methode to delete an ingredient
+   * Method to delete unit
    * @param {express.Request} req Express request object
    * @param {express.Response} res Express response object
    * @param {express.NextFunction} next Express response function
    */
-  async deleteIngredient(req, res, next) {
+  async deleteUnit(req, res, next) {
     const { id } = req.params;
 
     assert.ok(!isNaN(id), "id must be a number!");
 
-    const result = await Ingredient.deleteOne(id);
+    const result = await Unit.deleteOne(id);
 
     if (result) {
       res.sendStatus(200);
@@ -79,4 +74,4 @@ const ingredientController = {
   },
 };
 
-module.exports = ingredientController;
+module.exports = unitController;

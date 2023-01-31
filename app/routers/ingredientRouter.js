@@ -1,5 +1,5 @@
 const express = require("express");
-const ingredientController = require("../controller/ingredientController");
+const ingredientController = require("../controllers/ingredientController");
 const catchAsync = require("../service/catchAsync");
 const { ingredientSchema } = require("../validation/schemas");
 const { validate } = require("../validation/validate");

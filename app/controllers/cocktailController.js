@@ -1,5 +1,5 @@
 const debug = require("debug")("controller");
-const { Cocktail } = require("../model");
+const { Cocktail } = require("../models");
 const assert = require("assert");
 const express = require("express");
 

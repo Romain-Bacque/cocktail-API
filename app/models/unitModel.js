@@ -1,4 +1,4 @@
-const client = require("../service/pgClient");
+const client = require("../service/pgPool");
 const CoreModel = require("./coreModel");
 const ExpressError = require("../service/ExpressError");
 
