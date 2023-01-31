@@ -77,17 +77,6 @@ class Ingredient extends CoreModel {
       return result.rows;
     } else return null;
   }
-
-  static async deleteOne(id) {
-    const query = {
-      text: `DELETE FROM "ingredient" WHERE "id" = $1;`,
-      values: [id],
-    };
-
-    const result = await pool.query(query);
-
-    return result.rowCount > 0;
-  }
 }
 
 module.exports = Ingredient;

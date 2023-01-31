@@ -87,17 +87,6 @@ class Cocktail extends CoreModel {
       return result.rows;
     } else return null;
   }
-
-  static async deleteOne(id) {
-    const query = {
-      text: `DELETE FROM "cocktail" WHERE "id" = $1;`,
-      values: [id],
-    };
-
-    const result = await pool.query(query);
-
-    return result.rowCount > 0;
-  }
 }
 
 module.exports = Cocktail;

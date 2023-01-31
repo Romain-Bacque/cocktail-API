@@ -44,17 +44,6 @@ class Unit extends CoreModel {
 
     return result.rowCount > 0;
   }
-
-  static async deleteOne(id) {
-    const query = {
-      text: `DELETE FROM "unit" WHERE "id" = $1;`,
-      values: [id],
-    };
-
-    const result = await pool.query(query);
-
-    return result.rowCount > 0;
-  }
 }
 
 module.exports = Unit;

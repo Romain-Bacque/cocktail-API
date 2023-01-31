@@ -111,7 +111,7 @@ $$ LANGUAGE PLPGSQL STRICT;
 -- ingredient
 CREATE OR REPLACE FUNCTION get_ingredients_details () RETURNS SETOF packed2 AS $$
 
-SELECT i.id, name, title FROM ingredient i
+SELECT i.id, name, title AS unit FROM ingredient i
 JOIN unit u
 ON i.unit_id = u.id
 
@@ -120,7 +120,7 @@ $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_ingredient_details (INT) RETURNS SETOF packed2 AS $$
 
-SELECT i.id, name, title FROM ingredient i
+SELECT i.id, name, title AS unit FROM ingredient i
 JOIN unit u
 ON i.unit_id = u.id
 WHERE i.id = $1;
