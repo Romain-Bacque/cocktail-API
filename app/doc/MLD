@@ -1,4 +1,4 @@
 COCKTAIL (id, name, created_at, updated_at)
 INGREDIENT (id, #unit_id, name, created_at, updated_at)
-COCKTAIL_HAS_INGREDIENT (#ingredient_id, #cocktail_id)
+COCKTAIL_HAS_INGREDIENT (#ingredient_id, #cocktail_id, created_at, updated_at)
 UNIT (id, title, created_at, updated_at)

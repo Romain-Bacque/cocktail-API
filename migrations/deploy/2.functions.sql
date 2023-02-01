@@ -61,11 +61,11 @@ DECLARE id_cocktail INT;
 
 BEGIN
 
-    INSERT INTO "cocktail" ("name") VALUES ( $1 ->> 'name'::text ) 
+    INSERT INTO "cocktail" ("name", "updated_at") VALUES ( $1 ->> 'name'::text, NOW() ) 
     RETURNING ("cocktail"."id") into id_cocktail;
 
-    INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity")
-        SELECT id_cocktail, recipe.ingredient_id, recipe.quantity
+    INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity", "updated_at")
+        SELECT id_cocktail, recipe.ingredient_id, recipe.quantity, NOW()
             FROM (
                 SELECT * FROM json_to_recordset( ( $1 ->> 'details' )::json ) as recipe("ingredient_id" INT, "quantity" INT)
             ) as recipe;
@@ -88,13 +88,15 @@ BEGIN
     IF cocktailId IS NULL THEN
         RETURN;
     ELSE
-        UPDATE "cocktail" SET "name" = ($1 ->> 'name')::text WHERE "id" = cocktailId;
+        UPDATE "cocktail"
+        SET "name" = ($1 ->> 'name')::text, "updated_at" = NOW()
+        WHERE "id" = cocktailId;
 
         DELETE FROM "cocktail_has_ingredient"
         WHERE "cocktail_has_ingredient"."cocktail_id" = cocktailId;
 
-        INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity")
-        SELECT cocktailId, recipe.ingredient_id, recipe.quantity
+        INSERT INTO "cocktail_has_ingredient" ("cocktail_id", "ingredient_id", "quantity", "updated_at")
+        SELECT cocktailId, recipe.ingredient_id, recipe.quantity, NOW()
         FROM (
             SELECT * FROM json_to_recordset( ( $1 ->> 'details' )::json ) as recipe("ingredient_id" INT, "quantity" INT)
         ) as recipe;
@@ -134,12 +136,12 @@ DECLARE unitId INT;
 
 BEGIN
 
-    INSERT INTO "ingredient" ("name", "unit_id")
+    INSERT INTO "ingredient" ("name", "unit_id", "updated_at")
     SELECT i.name, (
     SELECT u."id" as "unit_id"
     FROM "unit" u
     WHERE u."id" = ($1 ->> 'unitId')::int
-    )
+    ), NOW()
     FROM json_to_record($1) AS i(name TEXT, unit TEXT)
     RETURNING "unit_id" into unitId;
 
