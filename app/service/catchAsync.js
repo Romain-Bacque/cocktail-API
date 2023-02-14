@@ -1,5 +1,3 @@
-const express = require("express");
-
 /**
  * Catch system error(s) occuring in an async controller method
  * @param {Object} controller - the controller to handle
