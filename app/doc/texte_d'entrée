@@ -1,5 +1,5 @@
-COCKTAIL: name, created_at, updated_at
+COCKTAIL: name
 CONTAINS, 1N INGREDIENT, 1N COCKTAIL: quantity
-INGREDIENT: name, created_at, updated_at
+INGREDIENT: name
 BELONGS TO, 11 INGREDIENT, 1N UNIT
-UNIT: title, created_at, updated_at
+UNIT: title
